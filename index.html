@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interview Ready: The Mock Interview | LSC 1503</title>
+<style>
+:root{
+  --pri:#2F2B36; --pri-dk:#1C1A21; --pri-lt:#ECEAF0;
+  --sec:#F4B6C2; --sec-dk:#9A2E4A; --sec-lt:#FDEFF2;
+  --butter:#F6C453; --bg:#F5F4F6; --paper:#FFFFFF;
+  --ink:#1F1C24; --muted:#615C69; --line:#E2DFE7; --bad:#B3261E;
+}
+*{box-sizing:border-box}
+html{font-size:18px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Tahoma,system-ui,-apple-system,sans-serif;line-height:1.6}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.2;margin:0 0 .5em}
+h2{font-size:2rem;color:var(--pri-dk)}
+h3{font-size:1.3rem}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--butter);outline-offset:2px}
+.ar{font-family:"Segoe UI",Tahoma,"Arial",sans-serif;direction:rtl;unicode-bidi:isolate}
+/* top bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--pri-dk);color:#fff;display:flex;align-items:center;gap:1rem;padding:.55rem 1.2rem;flex-wrap:wrap}
+.topbar .brand{font-family:Georgia,serif;font-size:1.05rem;flex:1;min-width:200px}
+.topbar .brand small{opacity:.75;font-family:"Segoe UI",sans-serif;font-size:.8rem;display:block}
+.pill{background:rgba(255,255,255,.12);border-radius:999px;padding:.25rem .8rem;font-size:.9rem;white-space:nowrap}
+.pill b{color:var(--butter)}
+.tb-btn{background:transparent;border:1.5px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;padding:.3rem .7rem;font-size:.85rem}
+.tb-btn:hover{background:rgba(255,255,255,.12)}
+/* layout */
+.wrap{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 56px)}
+nav.side{background:var(--paper);border-right:1px solid var(--line);padding:1rem .8rem;position:sticky;top:56px;height:calc(100vh - 56px);overflow:auto}
+nav.side button{display:flex;align-items:center;gap:.6rem;width:100%;text-align:left;background:none;border:0;border-radius:10px;padding:.55rem .6rem;color:var(--ink);font-size:.95rem}
+nav.side button:hover{background:var(--pri-lt)}
+nav.side button.active{background:var(--pri);color:#fff}
+nav.side .num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--line);font-size:.8rem;flex:none;font-weight:700}
+nav.side button.active .num{border-color:#fff}
+nav.side button.done .num{background:var(--sec-dk);border-color:var(--sec-dk);color:#fff}
+main{padding:2rem clamp(1rem,4vw,3rem) 4rem;max-width:980px;width:100%}
+.lead{font-size:1.1rem;color:var(--muted);max-width:68ch}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:1.2rem 1.3rem;margin:1rem 0}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.fact{background:var(--paper);border-left:6px solid var(--pri);border-radius:10px;padding:1rem 1.1rem}
+.fact .big{font-family:Georgia,serif;font-size:1.5rem;color:var(--pri)}
+.tip{background:var(--sec-lt);border:1.5px solid var(--sec);border-radius:12px;padding:1rem 1.2rem;margin:1rem 0}
+.tip strong{color:var(--sec-dk)}
+.warn{background:#FFF6DD;border:1.5px solid var(--butter);border-radius:12px;padding:1rem 1.2rem;margin:1rem 0}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:10px;padding:.7rem 1.3rem;font-weight:600}
+.btn:hover{background:var(--pri-dk)}
+.btn.ghost{background:transparent;color:var(--pri);border:2px solid var(--pri)}
+.btn.mint{background:var(--sec-dk)}
+.act-head{display:flex;align-items:center;gap:.6rem;margin-top:2rem;padding-top:1.2rem;border-top:2px dashed var(--line)}
+.act-head .tag{background:var(--butter);color:var(--ink);font-weight:700;border-radius:6px;padding:.1rem .55rem;font-size:.85rem}
+/* MCQ */
+.q{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem;margin:.8rem 0}
+.q .qt{font-weight:600;margin-bottom:.6rem}
+.opts{display:flex;flex-wrap:wrap;gap:.5rem}
+.opts button{background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:.5rem .9rem;text-align:left;color:var(--ink)}
+.opts button:hover:not(:disabled){border-color:var(--pri)}
+.opts.stack{flex-direction:column}
+.opts button.right{background:var(--sec-lt);border-color:var(--sec-dk);color:var(--sec-dk);font-weight:600}
+.opts button.wrong{background:#FCE8E6;border-color:var(--bad);color:var(--bad)}
+.opts button:disabled{cursor:default}
+.fb{margin-top:.6rem;font-size:.95rem;border-radius:8px;padding:.5rem .8rem;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--sec-lt);color:var(--sec-dk)}
+.fb.no{background:#FCE8E6;color:#7d1a14}
+.score{font-weight:700;color:var(--pri);margin:.8rem 0}
+/* rubric */
+.rub{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.rub .card{margin:0;position:relative;padding-top:1.4rem}
+.rub .wt{position:absolute;top:-14px;right:14px;background:var(--pri);color:#fff;border-radius:999px;padding:.15rem .75rem;font-weight:700;font-size:.9rem}
+.rub ul{padding-left:1.1rem;margin:.3rem 0}
+.bar{display:flex;height:34px;border-radius:10px;overflow:hidden;margin:1rem 0;font-size:.8rem;font-weight:700;color:#fff}
+.bar div{display:grid;place-items:center}
+.ladder{display:flex;flex-wrap:wrap;gap:.4rem;margin:.6rem 0}
+.ladder span{border-radius:8px;padding:.2rem .6rem;font-size:.85rem;background:var(--bg);border:1px solid var(--line)}
+/* flip cards */
+.flips{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.9rem}
+.flip{perspective:900px;height:170px;background:none;border:0;padding:0}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .f,.flip .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;padding:.9rem;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.flip .f{background:var(--pri);color:#fff;font-family:Georgia,serif;font-size:1.3rem}
+.flip .f small{font-family:"Segoe UI",sans-serif;font-size:.75rem;opacity:.7;margin-top:.4rem}
+.flip .b{background:var(--sec-lt);border:2px solid var(--sec);transform:rotateY(180deg);font-size:.88rem;color:var(--ink)}
+.flip .b .ar{font-size:1.2rem;font-weight:700;color:var(--sec-dk);margin-bottom:.4rem}
+/* timeline */
+.tl{position:relative;margin:1rem 0 1rem .6rem;padding-left:1.8rem;border-left:4px solid var(--sec)}
+.tl .step{position:relative;margin-bottom:1.3rem}
+.tl .step::before{content:"";position:absolute;left:-2.35rem;top:.3rem;width:18px;height:18px;border-radius:50%;background:var(--pri);border:4px solid var(--bg)}
+.say{display:inline-block;background:var(--pri-lt);color:var(--pri-dk);border-radius:8px;padding:.1rem .5rem;margin:.15rem .1rem;font-style:italic}
+/* transcript */
+.script{background:var(--paper);border-radius:12px;padding:1rem 1.2rem;border:2px solid var(--line)}
+.script.weak{border-color:#E7B7B2}.script.strong{border-color:var(--sec)}
+.script p{margin:.4rem 0}
+.script .act{color:var(--muted);font-style:italic;font-size:.92rem}
+.script .who{font-weight:700}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.chk{display:flex;flex-direction:column;gap:.4rem;margin:.6rem 0}
+.chk label{display:flex;gap:.6rem;align-items:flex-start;background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:.5rem .8rem;cursor:pointer}
+.chk label.right{border-color:var(--sec-dk);background:var(--sec-lt)}
+.chk label.wrong{border-color:var(--bad);background:#FCE8E6}
+.chk label.missed{border-style:dashed;border-color:var(--sec-dk)}
+/* breathing */
+.breathe{display:flex;flex-direction:column;align-items:center;gap:.8rem;padding:1rem}
+.circle{width:120px;height:120px;border-radius:50%;background:var(--sec);display:grid;place-items:center;font-weight:700;color:var(--sec-dk);transition:transform 4s ease-in-out}
+/* recorder */
+.rec{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:1.1rem;margin:1rem 0}
+.rec .prompt{background:var(--pri-lt);border-radius:10px;padding:.7rem .9rem;margin:.5rem 0}
+.rec .row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-top:.6rem}
+.rec audio{width:100%;max-width:380px;margin-top:.5rem}
+.recdot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--bad);animation:blink 1s infinite;vertical-align:middle}
+@keyframes blink{50%{opacity:.2}}
+/* home door */
+.hero{display:grid;grid-template-columns:auto 1fr;gap:2.5rem;align-items:center;margin-bottom:2rem}
+.frame{width:250px;height:360px;background:var(--pri-dk);border-radius:125px 125px 6px 6px;padding:12px 12px 0;perspective:1200px;position:relative}
+.frame::after{content:"";position:absolute;inset:12px 12px 0;border-radius:113px 113px 0 0;background:linear-gradient(180deg,#FFF6F2 0%,#F6B8A8 100%)}
+.door{position:relative;z-index:2;width:100%;height:100%;border-radius:113px 113px 0 0;background:var(--pri);transform-origin:left center;transition:transform 1.4s cubic-bezier(.6,.1,.2,1);box-shadow:inset 0 0 0 10px rgba(0,0,0,.1)}
+.door .panel{position:absolute;left:28px;right:28px;border:3px solid rgba(255,255,255,.18);border-radius:8px}
+.door .p1{top:120px;height:80px;border-radius:70px 70px 8px 8px;top:40px;height:140px}
+.door .p2{top:200px;height:110px}
+.door .knob{position:absolute;right:22px;top:190px;width:18px;height:18px;border-radius:50%;background:var(--butter)}
+.door .sign{position:absolute;left:50%;top:110px;transform:translateX(-50%) rotate(-3deg);background:var(--sec);color:var(--sec-dk);border-radius:8px;padding:.45rem .8rem;text-align:center;font-weight:700;font-size:.85rem;width:150px;box-shadow:0 4px 0 var(--sec-dk);transform-origin:top center}
+.door .sign::before{content:"";position:absolute;left:50%;top:-22px;width:40px;height:22px;border:2px solid var(--butter);border-bottom:0;border-radius:20px 20px 0 0;transform:translateX(-50%)}
+.door.knock{animation:knock .45s 2}
+@keyframes knock{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.door.open{transform:rotateY(-78deg)}
+.series{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.8rem;margin-top:1rem}
+.tile{border-radius:14px 14px 10px 10px;padding:1rem;background:var(--paper);border:1px solid var(--line);border-top:8px solid var(--c)}
+.tile.here{outline:3px solid var(--pri)}
+.tile.reserved{border:2px dashed #b9aeb7;border-top:8px dashed #b9aeb7;background:transparent}
+.tile .n{font-size:.8rem;color:var(--muted)}
+.tile h3{font-size:1.05rem;margin:.2rem 0}
+.tile p{font-size:.85rem;margin:0;color:var(--muted)}
+.namebox{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0}
+.namebox input{flex:1;min-width:220px;font:inherit;padding:.6rem .9rem;border:2px solid var(--line);border-radius:10px}
+.badges{display:flex;flex-wrap:wrap;gap:.6rem}
+.badge{display:flex;align-items:center;gap:.4rem;background:var(--paper);border:2px solid var(--line);border-radius:999px;padding:.3rem .8rem;font-size:.85rem;opacity:.45}
+.badge.got{opacity:1;border-color:var(--sec-dk);background:var(--sec-lt)}
+.next{display:flex;justify-content:space-between;margin-top:2.5rem;gap:1rem}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--ink);color:#fff;padding:.7rem 1.2rem;border-radius:12px;z-index:60;transition:transform .35s;font-weight:600}
+.toast.show{transform:translateX(-50%) translateY(0)}
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+/* certificate: interview pass */
+.overlay{position:fixed;inset:0;background:rgba(36,26,33,.7);display:none;align-items:center;justify-content:center;z-index:70;padding:1rem}
+.overlay.show{display:flex}
+.pass{background:#fff;width:min(430px,100%);border-radius:18px;overflow:hidden;text-align:center;position:relative;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.pass .strap{height:70px;background:repeating-linear-gradient(90deg,var(--pri) 0 18px,var(--pri-dk) 18px 36px);position:relative}
+.pass .hole{position:absolute;left:50%;bottom:-12px;transform:translateX(-50%);width:70px;height:16px;border-radius:10px;background:var(--bg);border:3px solid var(--pri-dk)}
+.pass .body{padding:1.8rem 1.5rem 1.2rem}
+.pass .photo{width:92px;height:92px;border-radius:50%;margin:0 auto .6rem;background:var(--sec);display:grid;place-items:center;font-family:Georgia,serif;font-size:2.2rem;color:var(--sec-dk);font-weight:700}
+.pass .nm{font-family:Georgia,serif;font-size:1.6rem;color:var(--pri-dk)}
+.pass .lbl{background:var(--pri);color:#fff;border-radius:8px;display:inline-block;padding:.2rem .9rem;margin:.6rem 0;font-weight:700}
+.pass .meta{font-size:.85rem;color:var(--muted)}
+.pass .foot{background:var(--sec-lt);padding:.7rem;font-size:.8rem;color:var(--sec-dk)}
+.pass-actions{display:flex;gap:.5rem;justify-content:center;padding:0 1rem 1rem;flex-wrap:wrap}
+footer.credit{text-align:center;color:var(--muted);font-size:.85rem;padding:1.5rem}
+@media(max-width:820px){
+  .wrap{grid-template-columns:1fr}
+  nav.side{position:static;height:auto;display:flex;overflow-x:auto;gap:.3rem;border-right:0;border-bottom:1px solid var(--line);padding:.5rem}
+  nav.side button{width:auto;white-space:nowrap}
+  nav.side .lbl{display:none}
+  nav.side button.active .lbl{display:inline}
+  .hero{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .two{grid-template-columns:1fr}
+  h2{font-size:1.6rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.seg{border-radius:6px;padding:.05rem .25rem}
+.c-pr{background:#DCE8F5}.c-pa{background:#F6E5CF}.c-pe{background:#EFE0F4}.c-fu{background:#DDF1E6}
+.key4{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin:1rem 0}
+.key4 .k{border-radius:12px;padding:1rem;border-top:8px solid}
+.k.pr{background:#DCE8F5;border-color:#2B5D8C}.k.pa{background:#F6E5CF;border-color:#A0632A}
+.k.pe{background:#EFE0F4;border-color:#7A3E8C}.k.fu{background:#DDF1E6;border-color:#2E7D5B}
+.k h3{margin-bottom:.3rem}
+.k .q2{font-size:.9rem;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:.5rem;font-size:.85rem;margin:.5rem 0}
+.legend span{border-radius:6px;padding:.1rem .6rem}
+.sample{background:#fff;border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.3rem;margin:1rem 0}
+.sample .who{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
+.sample p{line-height:1.9;margin:.3rem 0}
+.sample.plain .seg{background:none!important}
+.small-btn{background:var(--pri-lt);color:var(--pri-dk);border:0;border-radius:8px;padding:.35rem .8rem;font-size:.85rem;font-weight:600}
+.builder label{display:block;font-weight:600;margin:.7rem 0 .2rem}
+.builder input,.builder select{width:100%;font:inherit;padding:.5rem .8rem;border:2px solid var(--line);border-radius:10px;background:#fff}
+.builder .hint{font-size:.85rem;color:var(--muted);font-weight:400}
+.cue{border:3px dashed var(--pri);border-radius:16px;padding:1rem;background:#fff}
+.cue ul{margin:.2rem 0 .2rem 1rem;padding:0}
+.timer{font-family:Georgia,serif;font-size:2.2rem;color:var(--pri-dk)}
+.tbar{height:14px;border-radius:8px;background:linear-gradient(90deg,#F6D0C8 0 25%,#CDEBD5 25% 50%,#F6E3B0 50% 100%);position:relative;margin:.4rem 0 .2rem;max-width:420px}
+.tbar i{position:absolute;top:-4px;width:4px;height:22px;background:var(--ink);border-radius:2px;left:0}
+.tlabels{display:flex;max-width:420px;font-size:.75rem;color:var(--muted)}
+.tlabels span:nth-child(1){flex:25}.tlabels span:nth-child(2){flex:25}.tlabels span:nth-child(3){flex:50}
+@media(max-width:820px){
+  .topbar{gap:.35rem .5rem;padding:.45rem .7rem}
+  .topbar .brand{flex:1 1 100%;font-size:.95rem;min-width:0}
+  .topbar .brand small{display:none}
+  .pill,.tb-btn{font-size:.78rem;padding:.2rem .55rem}
+}
+main:focus{outline:none}
+
+.c-sk{background:#F8DCC6}.c-le{background:#E6DCFA}.c-jo{background:#D8F0E2}.c-ex{background:#FFEFB8}
+.k.sk{background:#F8DCC6;border-color:#A4521A}.k.le{background:#E6DCFA;border-color:#4E3A86}
+.k.jo{background:#D8F0E2;border-color:#2E7D5B}.k.ex{background:#FFEFB8;border-color:#B08A00}
+.skills{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.7rem}
+.skbtn{background:#fff;border:2px solid var(--line);border-radius:14px 14px 10px 10px;padding:.8rem;text-align:left;border-top:6px solid var(--pri);color:var(--ink)}
+.skbtn:hover{border-color:var(--pri)}
+.skbtn.on{background:var(--pri-lt);border-color:var(--pri)}
+.skbtn .ic{font-size:1.5rem}.skbtn b{display:block}.skbtn .ar{font-size:.85rem;color:var(--muted)}
+.skbtn.seen::after{content:" ✓";color:var(--sec-dk);font-weight:700}
+.panel2{background:#fff;border:2px solid var(--pri);border-radius:16px;padding:1.2rem 1.4rem;margin:1rem 0}
+.panel2 ul{margin:.3rem 0 .6rem 1.1rem;padding:0}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.3rem 0}
+.chips button{background:var(--sec-lt);border:1.5px solid var(--sec);color:var(--sec-dk);border-radius:999px;padding:.2rem .7rem;font-size:.85rem}
+
+.c-st{background:#D8F0E2}.c-we{background:#F9DCDC}.c-im{background:#D6ECF7}
+.c-ch{background:#E4ECD2}.c-re{background:#E6DCFA}.c-ba{background:#D6ECF7}
+.k.st{background:#D8F0E2;border-color:#2E7D5B}.k.we{background:#F9DCDC;border-color:#B3261E}.k.im{background:#D6ECF7;border-color:#1F6180}
+.k.ch{background:#E4ECD2;border-color:#5E7A2E}.k.re{background:#E6DCFA;border-color:#4E3A86}.k.ba{background:#D6ECF7;border-color:#1F6180}
+.qbanner{display:flex;gap:.6rem;align-items:center;background:var(--pri);color:#fff;border-radius:12px;padding:.6rem 1rem;margin:1.2rem 0 .4rem;font-weight:700}
+.qbanner span{background:var(--sec);color:var(--sec-dk);border-radius:6px;padding:.05rem .5rem}
+.tabs{display:flex;gap:.4rem;margin:.6rem 0}
+.tabs button{border:2px solid var(--pri);background:#fff;color:var(--pri-dk);border-radius:10px;padding:.4rem 1rem;font-weight:700}
+.tabs button.on{background:var(--pri);color:#fff}
+
+.c-s{background:#D6ECF7}.c-t{background:#E6DCFA}.c-a{background:#FFE0CC}.c-r{background:#D8F0E2}
+.k.s{background:#D6ECF7;border-color:#1F6180}.k.t{background:#E6DCFA;border-color:#4E3A86}.k.a{background:#FFE0CC;border-color:#B5541C}.k.r{background:#D8F0E2;border-color:#2E7D5B}
+.star{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+.star div{flex:1;min-width:150px;border-radius:14px;padding:.8rem;text-align:center}
+.star b{display:block;font-family:Georgia,serif;font-size:2.2rem;line-height:1}
+
+.c-p1{background:#FCE3A0}.c-p2{background:#FAD4CB}.c-p3{background:#D6ECF7}.c-p4{background:#D8F0E2}
+.k.p1{background:#FCE3A0;border-color:#8A6500}.k.p2{background:#FAD4CB;border-color:#8E3322}.k.p3{background:#D6ECF7;border-color:#1F6180}.k.p4{background:#D8F0E2;border-color:#2E7D5B}
+
+.c1{background:#FCE3A0}.c2{background:#FAD4CB}.c3{background:#D6ECF7}.c4{background:#D8F0E2}
+.scene{width:100%;max-width:520px}
+.scene .bub{opacity:0;transform:scale(.6);transform-origin:center;transition:opacity .4s,transform .4s}
+.scene.go .bub1{opacity:1;transform:scale(1)}
+.scene.go .bub2{opacity:1;transform:scale(1);transition-delay:1.1s}
+.hero2{display:grid;grid-template-columns:minmax(260px,520px) 1fr;gap:2rem;align-items:center;margin-bottom:1.5rem}
+.acc{background:#fff;border:1px solid var(--line);border-radius:14px;margin:.7rem 0;overflow:hidden}
+.acc>button{width:100%;display:flex;gap:.8rem;align-items:center;text-align:left;background:none;border:0;padding:.9rem 1.1rem;font-weight:700;color:var(--ink)}
+.acc>button .tag{background:var(--pri);color:#fff;border-radius:8px;padding:.1rem .55rem;font-size:.85rem;flex:none}
+.acc>button .arr{margin-left:auto;transition:transform .2s}
+.acc.open>button .arr{transform:rotate(90deg)}
+.acc .inner{display:none;padding:0 1.1rem 1rem}
+.acc.open .inner{display:block}
+.acc.seen>button .tag{background:var(--sec-dk)}
+.filters{display:flex;flex-wrap:wrap;gap:.4rem;margin:.6rem 0}
+.filters button{border:2px solid var(--pri);background:#fff;border-radius:999px;padding:.25rem .8rem;font-size:.85rem;font-weight:600;color:var(--pri-dk)}
+.filters button.on{background:var(--pri);color:#fff}
+.stage{background:#fff;border:2px solid var(--pri);border-radius:18px;padding:1.3rem 1.5rem;margin:1rem 0}
+.stage .step{font-size:.85rem;color:var(--muted);font-weight:700;letter-spacing:.03em}
+.stage .bigq{font-family:Georgia,serif;font-size:1.55rem;line-height:1.35;margin:.5rem 0 .8rem;color:var(--pri-dk)}
+.clock{font-family:Georgia,serif;font-size:1.6rem;padding:.2rem .8rem;border-radius:10px;background:var(--pri-lt)}
+.clock.ok{background:#D8F0E2;color:#1F5E43}.clock.over{background:#FCE8E6;color:#B3261E}
+.dots{display:flex;gap:.35rem;margin:.4rem 0}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.done{background:var(--sec-dk)}.dots i.now{background:var(--pri);outline:3px solid var(--sec)}
+.rate{display:flex;gap:.4rem;flex-wrap:wrap;margin:.4rem 0}
+.rate label{border:2px solid var(--line);border-radius:10px;padding:.3rem .8rem;cursor:pointer;background:#fff}
+.rate input{margin-right:.3rem}
+.rate label:has(input:checked){border-color:var(--pri);background:var(--pri-lt);font-weight:700}
+textarea.auto{width:100%;font:inherit;line-height:1.6;padding:.6rem .8rem;border:2px solid var(--line);border-radius:10px;resize:none;overflow:hidden;min-height:5.5em;background:#fff}
+textarea.auto:focus{border-color:var(--pri);outline:none}
+.pcopy{display:none;white-space:pre-wrap;border:1.5px solid #999;border-radius:8px;padding:.5rem .7rem;min-height:1.6em}
+.pcopy.empty{min-height:16em;background:repeating-linear-gradient(transparent 0 1.9em,#9a9a9a 1.9em 2em)}
+.sq{background:#fff;border:1px solid var(--line);border-radius:14px;padding:1rem 1.2rem;margin:1rem 0}
+.sq .qh{display:flex;gap:.6rem;align-items:flex-start}
+.sq .qh .tag{background:var(--pri);color:#fff;border-radius:8px;padding:.1rem .55rem;font-weight:700;flex:none}
+.steps{display:flex;flex-wrap:wrap;gap:.3rem;margin:.5rem 0}
+.steps span{border-radius:6px;padding:.05rem .5rem;font-size:.82rem}
+.wc{font-size:.8rem;color:var(--muted);text-align:right}
+.printhead{display:none}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff}
+  body:not(.pcert) .topbar,body:not(.pcert) nav.side,body:not(.pcert) footer.credit,.toast,canvas#fx,.noprint{display:none!important}
+  body:not(.pcert) .overlay{display:none!important}
+  body:not(.pcert) .wrap{display:block}
+  body:not(.pcert) main{padding:0;max-width:none}
+  body:not(.pcert) main > :not(.print-area){display:none!important}
+  textarea.auto{display:none!important}
+  .pcopy{display:block!important}
+  .printhead{display:block}
+  .sq{border:1px solid #bbb;break-inside:avoid}
+  .sq.long{break-inside:auto}
+  body.pcert .topbar,body.pcert nav.side,body.pcert .wrap,body.pcert footer.credit{display:none!important}
+  body.pcert .overlay{position:static;display:flex;background:#fff}
+  body.pcert .pass-actions{display:none}
+  body.pcert .pass{box-shadow:none;border:2px solid var(--pri)}
+}
+@media(max-width:820px){.hero2{grid-template-columns:1fr;text-align:center}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">Interview Ready: The Mock Interview<small>LSC 1503 Interview Assessment: final practice</small></div>
+  <span class="pill">Points <b id="pts">0</b></span>
+  <span class="pill">Badges <b id="bdg">0</b>/7</span>
+  <button class="tb-btn" id="saveBtn" title="Download your progress as a file">Save progress</button>
+  <button class="tb-btn" id="loadBtn" title="Open a progress file you saved">Load progress</button>
+  <input type="file" id="loadFile" accept=".json" hidden>
+</header>
+<div class="wrap">
+  <nav class="side" id="nav" aria-label="Stations"></nav>
+  <main id="main" tabindex="-1"></main>
+</div>
+<footer class="credit">Designed by: Nazila Motahari</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<canvas id="fx"></canvas>
+<div class="overlay" id="cert" role="dialog" aria-modal="true" aria-label="Interview Pass certificate">
+  <div>
+    <div class="pass">
+      <div class="strap"><div class="hole"></div></div>
+      <div class="body">
+        <div class="photo" id="cInit">?</div>
+        <div class="nm" id="cName">Student</div>
+        <div class="lbl">Interview Pass: Final</div>
+        <p style="margin:.3rem 0">has completed the <b>Interview Ready</b> series and is ready for the LSC 1503 interview.</p>
+        <p class="meta" id="cMeta"></p>
+      </div>
+      <div class="foot">LSC 1503 Professional Spoken Communication<br>Designed by: Nazila Motahari</div>
+    </div>
+    <div class="pass-actions" style="margin-top:1rem">
+      <button class="btn" onclick="printCert()">Print or save as PDF</button>
+      <button class="btn mint" id="resBtn">Download results</button>
+      <button class="btn ghost" style="background:#fff" onclick="document.getElementById('cert').classList.remove('show')">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+
+
+
+/* ================= STATE ================= */
+const S={name:'',points:0,badges:[],done:{},answered:{},final:null,recs:{},card:{},seen:{}};
+const BADGES={
+ s1:{icon:'🤝',name:'Practice Partner'}, s2:{icon:'🔤',name:'Word Master'}, s3:{icon:'📖',name:'Sample Reader'},
+ s4:{icon:'🪑',name:'Mock Master'}, s5:{icon:'⭐',name:'Feedback Giver'}, s6:{icon:'🎫',name:'Interview Ready'},
+ s7:{icon:'✍️',name:'Script Writer'}
+};
+const STATIONS=[
+ {id:'home',t:'Welcome'},
+ {id:'s1',t:'Practise with a partner'},
+ {id:'s2',t:'Vocabulary review'},
+ {id:'s3',t:'All questions and samples'},
+ {id:'s4',t:'Interview practice'},
+ {id:'s5',t:'Peer feedback'},
+ {id:'s6',t:'Final check'},
+ {id:'s7',t:'My interview script'}
+];
+let cur='home';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
+function addPts(n){S.points+=n;$('#pts').textContent=S.points}
+function award(id){
+  if(S.badges.includes(id))return;
+  S.badges.push(id);S.done[id]=true;$('#bdg').textContent=S.badges.length;
+  toast(`${BADGES[id].icon} Badge earned: ${BADGES[id].name}`);confetti();renderNav();
+}
+function refreshTop(){$('#pts').textContent=S.points;$('#bdg').textContent=S.badges.length}
+function speak(t){
+  if(!('speechSynthesis' in window)){toast('Speech is not available in this browser.');return}
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-GB';u.rate=.9;speechSynthesis.speak(u);
+}
+
+/* ================= CONFETTI ================= */
+function confetti(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const c=$('#fx'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+  const cols=['#2F2B36','#F4B6C2','#9A2E4A','#D6ECF7','#FCE3A0'];
+  const P=Array.from({length:140},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.4,r:5+Math.random()*6,c:cols[Math.random()*5|0],vy:2+Math.random()*3,vx:-1.5+Math.random()*3,a:Math.random()*6}));
+  let f=0;(function tick(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.a+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/2,p.r,p.r*.6);x.restore()});if(++f<170)requestAnimationFrame(tick);else x.clearRect(0,0,c.width,c.height)})();
+}
+
+/* ================= MCQ ENGINE ================= */
+function mcq(el,key,items,opts={}){
+  const box=document.createElement('div');el.appendChild(box);
+  let right=0,count=0;
+  items.forEach((it,i)=>{
+    const q=document.createElement('div');q.className='q';
+    q.innerHTML=`<div class="qt">${i+1}. ${it.q}</div><div class="opts ${opts.inline?'':'stack'}"></div><div class="fb"></div>`;
+    const ob=q.querySelector('.opts'),fb=q.querySelector('.fb');
+    it.o.forEach((o,j)=>{
+      const b=document.createElement('button');b.innerHTML=o;
+      b.onclick=()=>{
+        ob.querySelectorAll('button').forEach(x=>x.disabled=true);
+        const ok=j===it.a;
+        b.classList.add(ok?'right':'wrong');
+        if(!ok)ob.children[it.a].classList.add('right');
+        fb.className='fb show '+(ok?'ok':'no');
+        fb.innerHTML=(ok?'✔ Correct! ':'✘ Not quite. ')+(it.why||'');
+        const aKey=key+'_'+it.q;if(ok){right++;if(!S.answered[aKey])addPts(10)}
+        count++;S.answered[aKey]=S.answered[aKey]||ok;
+        if(count===items.length){box.querySelector('.score').textContent=`You got ${right} out of ${items.length}.`;opts.done&&opts.done(right,items.length)}
+      };
+      ob.appendChild(b);
+    });
+    box.appendChild(q);
+  });
+  const sc=document.createElement('div');sc.className='score';box.appendChild(sc);
+}
+function actHead(el,tag,title){
+  const d=document.createElement('div');d.className='act-head';
+  d.innerHTML=`<span class="tag">${tag}</span><h3 style="margin:0">${title}</h3>`;el.appendChild(d);
+}
+function nextBtns(el){
+  const i=STATIONS.findIndex(s=>s.id===cur);
+  const d=document.createElement('div');d.className='next';
+  d.innerHTML=(i>0?`<button class="btn ghost" data-go="${STATIONS[i-1].id}">Back</button>`:'<span></span>')+
+    (i<STATIONS.length-1?`<button class="btn" data-go="${STATIONS[i+1].id}">Next: ${STATIONS[i+1].t}</button>`:'');
+  d.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+  el.appendChild(d);
+}
+function renderNav(){
+  const n=$('#nav');n.innerHTML='';
+  STATIONS.forEach((s,i)=>{
+    const b=document.createElement('button');
+    b.className=(s.id===cur?'active ':'')+(S.done[s.id]?'done':'');
+    b.innerHTML=`<span class="num">${i===0?'⌂':(S.done[s.id]?'✓':i)}</span><span class="lbl">${s.t}</span>`;
+    b.onclick=()=>go(s.id);n.appendChild(b);
+  });
+}
+function go(id){cur=id;renderNav();const m=$('#main');m.innerHTML='';VIEWS[id](m);nextBtns(m);window.scrollTo(0,0);m.focus({preventScroll:true})}
+const VIEWS={};
+
+/* ================= DATA ================= */
+const QS=[
+ {id:'q1',tag:'Q1',grp:'Mandatory',app:'App 2',q:'Tell me about yourself.',
+  map:['Present','Past','Personal','Future'],
+  starters:['My name is… I\'m currently studying…','Before HCT, I… That experience taught me…','I would describe myself as… For example,…','In the future, I would like to… because…'],
+  who:'Teacher\'s sample',
+  seg:[['c1','I am 20 years old, and I am currently studying Business at HCT.'],['c3','I am passionate about communication and teamwork, and I enjoy learning new things. In my free time, I like reading books about leadership and personal development, playing football, and spending time with my family. I would describe myself as hardworking, responsible, and eager to improve my skills.'],['c4','My goal is to gain experience in a professional environment and apply what I learn in college to real-life situations.']],
+  tip:'Make it even stronger: add one real example from your Past (a project, competition or volunteering).',
+  follow:['Why did you choose your program?','Can you tell me more about that?']},
+ {id:'q2',tag:'Q2',grp:'Mandatory',app:'App 3',q:'From the study skills you worked on during the LSC 1503 course, which one might be the most useful to your future job? Can you give an example of how you might use it in a professional situation?',
+  map:['Skill','What I learned','Why it matters','Example at work'],
+  starters:['I think … might be the most useful for my future job as a…','In this module, I learned how to…','This is important because…','For example, if…, I would…'],
+  who:'Aisha: Time Management',
+  seg:[['c1','From the study skills I worked on, I think time management might be the most useful for my future job as a nurse.'],['c2','In this module, I learned how to make a to-do list and put the most important tasks first. I also learned that starting tasks early helps me avoid stress.'],['c3','Nurses are very busy. They have many patients and many tasks at the same time, so they need to decide what is most urgent.'],['c4','For example, if three patients need help at the same time, I would check which patient needs care first, and then plan the other tasks. This way, I can take care of everyone safely.']],
+  follow:['Why did you choose that skill?','Do you use this skill now, in college?']},
+ {id:'q3a',tag:'3a',grp:'Self-description',app:'App 4',q:'What are your strengths and weaknesses?',
+  map:['Strength','Example','Weakness','Improvement'],
+  starters:['One of my strengths is that I\'m…','For example, when I…','One thing I\'m working on is…','To improve, I\'m… I have already…'],
+  who:'Maitha',
+  seg:[['c1','One of my strengths is that I\'m very organized.'],['c2','For example, when my group made a video project last semester, I made a plan with a date for each task, and we submitted the project two days early.'],['c3','My weakness is that I sometimes get nervous when I speak in front of a big group.'],['c4','To improve, I\'m practising my presentations with my friends and recording myself. I have already become more confident, and in my last presentation I didn\'t need my notes.']],
+  follow:['Can you give me another example of that strength?','How are you improving that?']},
+ {id:'q3b',tag:'3b',grp:'Self-description',app:'App 4',q:'Do you like working independently or in teams? Why / Why not?',
+  map:['My choice','Reason','Example','Balance'],
+  starters:['I prefer working…','because… / The main reason is…','For example, when I…','However, I can also…'],
+  who:'Noura',
+  seg:[['c1','I prefer working in teams.'],['c2','I enjoy sharing ideas with people, and I learn a lot from my classmates.'],['c3','For example, this semester my group prepared a presentation. Each person researched one part, and then we practised together and gave each other feedback. Our final presentation was much better than something I could do alone.'],['c4','But I can also work independently when I need to. For example, I always do my homework and my revision on my own.']],
+  follow:['What would you do if a team member didn\'t do their part?','Why do you prefer that?']},
+ {id:'q3c',tag:'3c',grp:'Behavioural',app:'App 5',q:'Tell me about a time when you worked in a team. What was challenging? What did you enjoy?',
+  map:['Situation','Task','Action','Result'],
+  starters:['Last semester, in my…','My job was to…','The challenging part was… First, I… Then I…','In the end,… What I enjoyed most was… I learned that…'],
+  who:'Hessa',
+  seg:[['c3','Last semester, in my English class, I worked in a group of four to prepare a presentation about healthy eating.'],['c1','We had two weeks, and my job was to design the slides and present the introduction.'],['c2','The challenging part was that one member was often absent, so our plan was late. I suggested a WhatsApp group and made a simple plan with a deadline for each person. I also offered to help her with her part.'],['c4','In the end, we finished on time and got a good grade. What I enjoyed most was practising together and giving each other feedback. I learned that clear planning makes teamwork much easier.']],
+  follow:['What would you do differently next time?','What did you do in that situation?']},
+ {id:'q3d',tag:'3d',grp:'Behavioural',app:'App 5',q:'Tell me about a time when you had to explain something difficult to a coworker or classmate. How did you make sure they understood?',
+  map:['Situation','Task','Action','Result'],
+  starters:['In Grade 12 / Last semester,…','The teacher asked me to… / My classmate needed…','First, I explained… Then I showed… At the end, I asked…','In the end,… I learned that…'],
+  who:'Obaid',
+  seg:[['c3','In Grade 12, a classmate didn\'t understand how to make charts in Excel, and we had a project due the next week.'],['c1','Our teacher asked me to help him, because I\'m good with computers.'],['c2','First, I explained the steps slowly, using simple words. Then I showed him on my laptop, and after that he tried it himself while I watched. At the end, I asked him to explain the steps back to me.'],['c4','He made the chart correctly and got a good mark. I learned that showing and checking is better than just talking.']],
+  follow:['How did you know he understood?','Can you tell me more about that?']},
+ {id:'q3e',tag:'3e',grp:'Behavioural',app:'App 5',q:'Tell me about a challenge or conflict you had and how you dealt with it.',
+  map:['Situation','Task','Action','Result'],
+  starters:['Last year, during…','I needed to…','I stayed calm and… Then I suggested…','In the end,… I learned that…'],
+  who:'Latifa',
+  seg:[['c3','Last year, during a group project, two members of my team disagreed about our topic, and they started to argue.'],['c1','I was the group leader, so I needed to help the team agree and continue working.'],['c2','I stayed calm and asked each person to explain their idea. Then I suggested that we list the good points of both ideas. In the end, we decided to combine the two ideas.'],['c4','Everyone was happy, and we finished the project on time. I learned that listening to everyone is the best way to solve a conflict.']],
+  follow:['What did you learn from that?','What would you do if it happened again?']},
+ {id:'q3f',tag:'3f',grp:'Future',app:'App 6',q:'How is your education and college experience preparing you for work?',
+  map:['Skill I\'m building','Where I learned it','Example','How it helps at work'],
+  starters:['My college experience is preparing me by…','In my … class, I learned…','For example, last month I…','In my future job, I will need to…'],
+  who:'Mariam',
+  seg:[['c1','My college experience is preparing me for work in many ways, but the biggest one is communication.'],['c2','In LSC 1103, I learned how to write professional emails, and in LSC 1503, I\'m learning to speak confidently in presentations and interviews, like this one.'],['c3','For example, last month I presented a marketing idea to my class, and I answered questions from my teacher and my classmates.'],['c4','In my future job, I will need to write emails to clients and present ideas in meetings, so these skills will help me a lot. HCT is also teaching me to meet deadlines, which is important in any workplace.']],
+  follow:['Can you give me an example of that?','What skills do you still need?']},
+ {id:'q3g',tag:'3g',grp:'Future',app:'App 6',q:'What type of things do you like learning or doing in college? Why?',
+  map:['What I like','Why','Example','Link to my future'],
+  starters:['What I enjoy most in college is…','I like it because…','For example, last week we…','This will help me when I…'],
+  who:'Sultan',
+  seg:[['c1','What I enjoy most in college is the practical labs, especially when we build and fix computer networks.'],['c2','I like them because I learn best by doing, and I can see the results immediately.'],['c3','For example, last week we set up a small network in the lab. When it didn\'t work, my partner and I checked every cable and setting, and we found the problem ourselves.'],['c4','Moments like this make me more excited about my future job as a network technician, because solving problems will be part of my daily work.']],
+  follow:['Why do you enjoy that?','Can you tell me more about that?']},
+ {id:'q3h',tag:'3h',grp:'Future',app:'App 6',q:'What would you like to do professionally after college? Why?',
+  map:['My goal','Why','My plan','What I can offer'],
+  starters:['After college, I would like to work as…','I chose this because…','First, I\'m planning to… Later, I hope to…','I believe I can…'],
+  who:'Alyazia',
+  seg:[['c1','After college, I would like to work as a pharmacy technician in a hospital here in Abu Dhabi.'],['c2','I chose this career because I care about people\'s health, and I really enjoy science, especially chemistry.'],['c3','First, I\'m planning to finish my diploma and get practical experience. Later, I hope to continue my studies and get a bachelor\'s degree.'],['c4','I believe I can help patients every day and support the healthcare system in my country.']],
+  follow:['Where do you see yourself in five years?','Why did you choose that field?']}
+];
+const MAPCOL=['c1','c2','c3','c4'];
+const VOCAB=[
+ ['punctual','ملتزم بالمواعيد','Interview'],['professional','مِهَني','Interview'],['polite','مُهذَّب','Interview'],['formal','رسمي','Interview'],
+ ['active listening','الإصغاء الفعّال','Interview'],['eye contact','التواصل البصري','Interview'],['posture','وضعية الجسم','Interview'],['gesture','إيماءة (حركة اليد)','Interview'],
+ ['hesitation','تردُّد','Interview'],['follow-up question','سؤال متابعة','Interview'],['self-correct','يُصحِّح نفسه','Interview'],['confident','واثق بنفسه','Interview'],
+ ['currently','حاليًا','About me'],['graduate (from)','يتخرّج (من)','About me'],['experience','خبرة / تجربة','About me'],['volunteer','يتطوّع','About me'],['goal','هدف','About me'],['passionate about','شغوف بـ','About me'],
+ ['strategy','استراتيجية / طريقة','Study skills'],['apply','يُطبِّق','Study skills'],['prioritize','يُحدِّد الأولويات','Study skills'],['deadline','موعد نهائي','Study skills'],['reliable source','مصدر موثوق','Study skills'],['plagiarism','الانتحال','Study skills'],
+ ['organized','منظَّم','Describe yourself'],['reliable','يُعتمد عليه','Describe yourself'],['flexible','مرن','Describe yourself'],['improve','يُحسِّن / يتحسّن','Describe yourself'],['independently','بشكل مستقل','Describe yourself'],['prefer','يُفضِّل','Describe yourself'],
+ ['challenge','تحدٍّ','Stories'],['conflict','خلاف / نزاع','Stories'],['deal with','يتعامل مع','Stories'],['suggest','يقترح','Stories'],['compromise','حلّ وسط','Stories'],['make sure','يتأكّد','Stories'],
+ ['prepare (someone) for','يُهيِّئ لـ','Future'],['develop','يُطوِّر','Future'],['career','مسيرة مهنية','Future'],['work placement','تدريب عملي في جهة عمل','Future'],['contribute to','يُساهم في','Future'],['employer','صاحب العمل','Future']
+];
+function segHTML(q){return `<p style="line-height:1.9;margin:.3rem 0">${q.seg.map(s=>`<span class="seg ${s[0]}">${esc(s[1])}</span>`).join(' ')}</p>`}
+function stepsHTML(q){return `<div class="steps">${q.map.map((m,i)=>`<span class="${MAPCOL[i]}">${i+1}. ${esc(m)}</span>`).join('')}</div>`}
+function bindSay(el){el.querySelectorAll('[data-say]').forEach(b=>b.onclick=()=>speak(b.dataset.say))}
+function autoGrow(t){t.style.height='auto';t.style.height=(t.scrollHeight+4)+'px'}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const SCENE=`<svg class="scene" id="scene" viewBox="0 0 520 340" role="img" aria-label="Two people sitting at a table in an interview room">
+  <rect x="0" y="0" width="520" height="340" rx="22" fill="#ECEAF0"/>
+  <rect x="0" y="250" width="520" height="90" fill="#DCD8E2"/>
+  <path d="M215 250 V110 a45 45 0 0 1 90 0 V250 Z" fill="#FBF3E4"/>
+  <path d="M215 250 V110 a45 45 0 0 1 22 -38 L237 262 Z" fill="#2F2B36"/>
+  <path d="M205 250 V110 a55 55 0 0 1 110 0 V250" fill="none" stroke="#1C1A21" stroke-width="8"/>
+  <rect x="214" y="14" width="92" height="34" rx="6" fill="#fff" stroke="#C9C4D2" stroke-width="2.5"/>
+  <text x="260" y="29" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#2F2B36">INTERVIEW</text>
+  <text x="260" y="42" text-anchor="middle" font-size="10" font-family="Segoe UI,sans-serif" fill="#9A2E4A">in progress</text>
+  <g><!-- interviewer (left) -->
+    <rect x="70" y="165" width="70" height="95" rx="12" fill="#9A2E4A"/>
+    <rect x="118" y="238" width="16" height="70" rx="6" fill="#6E1F35"/>
+    <circle cx="105" cy="140" r="26" fill="#C68E6A"/>
+    <path d="M79 138 a26 26 0 0 1 52 0 q-26 -14 -52 0z" fill="#3A2A22"/>
+    <rect x="62" y="205" width="12" height="100" rx="4" fill="#6B6475"/>
+    <rect x="130" y="205" width="85" height="16" rx="8" fill="#9A2E4A"/>
+  </g>
+  <g><!-- candidate (right) -->
+    <rect x="380" y="165" width="70" height="95" rx="12" fill="#2F2B36"/>
+    <rect x="386" y="238" width="16" height="70" rx="6" fill="#1C1A21"/>
+    <circle cx="415" cy="140" r="26" fill="#A8734F"/>
+    <path d="M389 138 a26 26 0 0 1 52 0 q-26 -14 -52 0z" fill="#221A16"/>
+    <rect x="446" y="205" width="12" height="100" rx="4" fill="#6B6475"/>
+    <rect x="305" y="205" width="85" height="16" rx="8" fill="#2F2B36"/>
+  </g>
+  <rect x="140" y="220" width="240" height="16" rx="6" fill="#8B6B4A"/>
+  <rect x="160" y="236" width="14" height="80" fill="#6E5238"/><rect x="346" y="236" width="14" height="80" fill="#6E5238"/>
+  <rect x="175" y="200" width="46" height="20" rx="2" fill="#fff" transform="rotate(-6 198 210)"/>
+  <rect x="330" y="198" width="10" height="22" rx="3" fill="#BFE3F2" opacity=".9"/>
+  <g class="bub bub1"><rect x="20" y="40" width="190" height="56" rx="16" fill="#fff" stroke="#9A2E4A" stroke-width="2.5"/><path d="M90 96 l12 18 l6 -18z" fill="#fff" stroke="#9A2E4A" stroke-width="2.5"/><rect x="92" y="93" width="16" height="5" fill="#fff"/>
+    <text x="115" y="64" text-anchor="middle" font-size="13" font-family="Segoe UI,sans-serif" fill="#1F1C24">Good morning.</text><text x="115" y="82" text-anchor="middle" font-size="13" font-family="Segoe UI,sans-serif" fill="#1F1C24">Please have a seat.</text></g>
+  <g class="bub bub2"><rect x="318" y="8" width="190" height="48" rx="16" fill="#fff" stroke="#2F2B36" stroke-width="2.5"/><path d="M400 56 l10 20 l8 -20z" fill="#fff" stroke="#2F2B36" stroke-width="2.5"/><rect x="402" y="53" width="15" height="5" fill="#fff"/>
+    <text x="413" y="37" text-anchor="middle" font-size="13" font-family="Segoe UI,sans-serif" fill="#1F1C24">Thank you. Good morning!</text></g>
+</svg>`;
+
+/* ================= VIEWS ================= */
+VIEWS.home=m=>{
+  m.innerHTML=`
+  <div class="hero2">
+    ${SCENE}
+    <div>
+      <h2 style="font-size:2.4rem">The Mock Interview</h2>
+      <p class="lead">The door is open and the interview has started. Review every question with sample answers and key words, practise a full interview with a partner, and write your own interview script.</p>
+      <div class="namebox">
+        <input id="nameIn" placeholder="Type your full name" value="${esc(S.name)}" aria-label="Your full name">
+        <button class="btn" id="knockBtn">Take a seat</button>
+      </div>
+      <p style="font-size:.9rem;color:var(--muted)">Your name goes on your script and your Interview Pass.</p>
+    </div>
+  </div>
+  <h3>Your badges</h3>
+  <div class="badges">${Object.entries(BADGES).map(([k,b])=>`<span class="badge ${S.badges.includes(k)?'got':''}">${b.icon} ${b.name}</span>`).join('')}</div>
+  <div class="card">
+    <h3>How this app works</h3>
+    <p style="margin:0">Go through the 7 stations. There is no recording in this app: you will practise with a <b>partner</b>. At the end, you will write your interview script and <b>print</b> it. Click <b>Save progress</b> often so you don't lose your writing.</p>
+  </div>
+  <h3 style="margin-top:2rem">The Interview Ready series</h3>
+  <div class="series">
+    <div class="tile" style="--c:#7A1E3C"><div class="n">App 1</div><h3>Step Into the Room</h3><p>The exam, the rubric, key words, professionalism, body language, calm-down tricks</p></div>
+    <div class="tile" style="--c:#2B5D8C"><div class="n">App 2</div><h3>Tell Me About Yourself</h3><p>Question 1</p></div>
+    <div class="tile" style="--c:#A4521A"><div class="n">App 3</div><h3>Study Skills for My Future Job</h3><p>Question 2</p></div>
+    <div class="tile" style="--c:#5E7A2E"><div class="n">App 4</div><h3>Self-Description Questions</h3><p>Questions 3a and 3b</p></div>
+    <div class="tile" style="--c:#6B3FA0"><div class="n">App 5</div><h3>Behavioural Questions</h3><p>Questions 3c to 3e</p></div>
+    <div class="tile" style="--c:#8A6500"><div class="n">App 6</div><h3>Future Questions</h3><p>Questions 3f to 3h</p></div>
+    <div class="tile here" style="--c:#2F2B36;background:#FDEFF2"><div class="n">Final practice (you are here)</div><h3>The Mock Interview</h3><p>All the questions, peer practice, and your printable script</p></div>
+  </div>`;
+  const nameIn=$('#nameIn');
+  nameIn.oninput=()=>{S.name=nameIn.value.trim()};
+  $('#knockBtn').onclick=()=>{
+    if(!S.name){toast('Please type your name first.');nameIn.focus();return}
+    $('#scene').classList.add('go');
+    setTimeout(()=>go('s1'),2600);
+  };
+};
+
+VIEWS.s1=m=>{
+  m.innerHTML=`<h2>1. Practise with a partner</h2>
+  <p class="lead">The best way to prepare for a face-to-face interview is face to face. Work in pairs (or groups of three) and take turns.</p>
+  <div class="grid">
+    <div class="card"><h3>🧑‍💼 Interviewer</h3>Holds the device. Reads the questions from Station 4. Asks follow-up questions. Keeps the time (3–5 minutes). Watches body language.</div>
+    <div class="card"><h3>🙋 Candidate</h3>Answers without notes. Follows the interview from the door to "Thank you". Uses the maps and calm-down strategies.</div>
+    <div class="card"><h3>👀 Observer (optional)</h3>Watches and listens. Fills in the peer feedback form in Station 5.</div>
+  </div>
+  <div class="card"><h3>Set up your practice</h3>
+    <p><b>1.</b> Put two chairs facing each other across a table. Phones away. <b>2.</b> The candidate goes outside, knocks, and waits. <b>3.</b> Do a full interview: greeting, Question 1, Question 2, one or two choice questions, closing. <b>4.</b> Give feedback (2 minutes). <b>5.</b> Swap roles.</p>
+    <p style="margin:0">Treat it like the real interview: stand up straight, make eye contact, and speak loudly enough for the recording.</p></div>
+  <div class="tip"><strong>Giving good feedback: one star ⭐ and one wish 🌱.</strong> Say one thing your partner did well and one thing to improve. Be kind and specific.<br>
+  <span class="say">You did well at…</span> <span class="say">I really liked your example about…</span> <span class="say">Next time, try to…</span> <span class="say">Maybe you could add…</span></div>`;
+  actHead(m,'Practice','Good peer practice?');
+  mcq(m,'s1',[
+   {q:'Which feedback is the most helpful?',o:['"It was good."','"Your example about the robotics club was great. Next time, try to look up from the table more."','"You were bad."'],a:1,why:'One star and one wish, both specific.'},
+   {q:'Your partner is the candidate. Where should their notes be?',o:['In their hand','Away. No notes in the interview','On the table'],a:1,why:'No notes or screen reading.'},
+   {q:'After one interview, what do you do?',o:['Stop','Give feedback, then swap roles','Do the same interview again with the same roles'],a:1,why:'Both partners need practice.'},
+   {q:'How long should a full practice interview take?',o:['About 1 minute','About 3 to 5 minutes','About 15 minutes'],a:1,why:'Same as the real one.'}
+  ],{done:(r,t)=>{if(r/t>=.75)award('s1');else toast('Read the station again, then retry.')}});
+};
+
+VIEWS.s2=m=>{
+  let grp='All';S.vseen=S.vseen||{};
+  const groups=['All',...new Set(VOCAB.map(v=>v[2]))];
+  m.innerHTML=`<h2>2. Vocabulary review</h2>
+  <p class="lead">Key words from all six apps. Choose a group, click a card to check the Arabic meaning, then test yourself.</p>
+  <div class="filters" id="vf">${groups.map(g=>`<button data-g="${g}">${g}</button>`).join('')}</div>
+  <div class="flips" id="vcards"></div>`;
+  const draw=()=>{
+    m.querySelectorAll('#vf button').forEach(b=>b.classList.toggle('on',b.dataset.g===grp));
+    $('#vcards').innerHTML=VOCAB.filter(v=>grp==='All'||v[2]===grp).map(v=>`<button class="flip"><div class="in"><div class="f">${esc(v[0])}<small>${v[2]}</small></div><div class="b"><div class="ar" lang="ar">${v[1]}</div>${esc(v[0])}</div></div></button>`).join('');
+    $('#vcards').querySelectorAll('.flip').forEach(f=>f.onclick=()=>f.classList.toggle('on'));
+  };
+  m.querySelectorAll('#vf button').forEach(b=>b.onclick=()=>{grp=b.dataset.g;draw()});draw();
+  actHead(m,'Test yourself','Choose the Arabic meaning');
+  const box=document.createElement('div');m.appendChild(box);
+  const build=()=>{
+    box.innerHTML='';
+    const pick=shuffle(VOCAB).slice(0,10);
+    const items=pick.map(v=>{const wrong=shuffle(VOCAB.filter(x=>x!==v)).slice(0,2);const opts=shuffle([v,...wrong]);return {q:`<b>${esc(v[0])}</b>`,o:opts.map(o=>`<span class="ar" lang="ar">${o[1]}</span>`),a:opts.indexOf(v),why:`${esc(v[0])} = <span class="ar" lang="ar">${v[1]}</span>`}});
+    mcq(box,'s2',items,{inline:true,done:(r,t)=>{
+      if(r/t>=.8)award('s2');else toast('Review the cards, then try a new set (80%+).');
+      const again=document.createElement('button');again.className='btn ghost';again.textContent='New set of words';again.onclick=build;box.appendChild(again);
+    }});
+  };
+  build();
+};
+
+VIEWS.s3=m=>{
+  S.qseen=S.qseen||{};
+  m.innerHTML=`<h2>3. All questions and sample answers</h2>
+  <p class="lead">Open each question to read and listen to a sample answer. The colours show the map for that question. Open all 10 to earn the badge.</p>
+  <div class="warn"><b>Remember:</b> samples are for learning, not copying. Your answers must be true and your own.</div>
+  <div id="accs">${QS.map(q=>`<div class="acc ${S.qseen[q.id]?'seen':''}" data-id="${q.id}"><button aria-expanded="false"><span class="tag">${q.tag}</span><span>${esc(q.q)}</span><span class="arr">▶</span></button>
+    <div class="inner"><p style="margin:.2rem 0;color:var(--muted);font-size:.9rem">${q.grp} question (practised in ${q.app})</p>
+    ${stepsHTML(q)}
+    <div class="sample" style="margin:.6rem 0"><div class="who"><h3 style="margin:0">${esc(q.who)}</h3><button class="small-btn" data-say="${esc(q.seg.map(s=>s[1]).join(' '))}">🔈 Listen</button></div>${segHTML(q)}</div>
+    ${q.tip?`<div class="tip" style="margin:.4rem 0"><strong>Tip:</strong> ${esc(q.tip)}</div>`:''}
+    <p style="margin:.4rem 0 0"><b>Possible follow-ups:</b> ${q.follow.map(f=>`<span class="say">${esc(f)}</span>`).join(' ')}</p></div></div>`).join('')}</div>
+  <p id="qcount" style="color:var(--muted)"></p>`;
+  bindSay(m);
+  const upd=()=>{const n=Object.keys(S.qseen).length;$('#qcount').textContent=`Questions opened: ${n} of 10`;if(n>=10)award('s3')};upd();
+  m.querySelectorAll('.acc>button').forEach(b=>b.onclick=()=>{
+    const a=b.parentElement;a.classList.toggle('open');b.setAttribute('aria-expanded',a.classList.contains('open'));
+    if(!S.qseen[a.dataset.id]){S.qseen[a.dataset.id]=true;addPts(5);a.classList.add('seen');upd()}
+  });
+};
+
+/* ---- Interview practice ---- */
+let M=null,clockInt=null;
+function buildMock(mode){
+  const choice=shuffle(QS.slice(2)).slice(0,2);
+  const steps=[
+   {k:'open',label:'Opening',say:`Good morning${S.partner?', '+S.partner:''}. Please have a seat. How are you today?`,note:'Candidate: knock, greet, wait to be invited to sit, thank, and ask back.'},
+   {k:'q',q:QS[0]},{k:'q',q:QS[1]},{k:'q',q:choice[0]},{k:'q',q:choice[1]},
+   {k:'close',label:'Closing',say:'Thank you. That\'s the end of the interview.',note:'Candidate: thank the interviewer, stand up calmly, and leave politely.'}
+  ];
+  M={mode,steps,i:0,start:Date.now(),shown:false};
+}
+function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+VIEWS.s4=m=>{
+  clearInterval(clockInt);
+  m.innerHTML=`<h2>4. Interview practice</h2>
+  <p class="lead">Choose how you want to practise. The app picks Question 1, Question 2 and two random choice questions, just like your teacher might.</p>
+  <div class="grid">
+    <div class="card"><h3>👥 With a partner</h3>The <b>interviewer</b> holds the device and reads the questions. The candidate answers without looking at the screen.<div class="namebox" style="margin:.6rem 0 0"><input id="partnerIn" placeholder="Candidate's name (optional)" value="${esc(S.partner||'')}"></div><button class="btn" id="startPeer" style="margin-top:.4rem">Start partner interview</button></div>
+    <div class="card"><h3>🧍 On my own</h3>Read each question, answer <b>out loud</b>, then check a sample answer. Good for extra practice at home.<br><button class="btn ghost" id="startSolo" style="margin-top:.8rem">Start solo practice</button></div>
+  </div>
+  <div id="mock"></div>`;
+  $('#partnerIn').oninput=e=>S.partner=e.target.value.trim();
+  $('#startPeer').onclick=()=>{buildMock('peer');runMock()};
+  $('#startSolo').onclick=()=>{buildMock('solo');runMock()};
+  if(M)runMock();
+};
+function runMock(){
+  const box=$('#mock');if(!box)return;
+  const st=M.steps[M.i],q=st.q;
+  const title=st.k==='q'?`<span class="tag" style="background:var(--pri);color:#fff;border-radius:8px;padding:.1rem .55rem">${q.tag}</span> ${q.grp} question`:st.label;
+  const text=st.k==='q'?q.q:st.say;
+  box.innerHTML=`<div class="stage">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap">
+      <div><div class="step">${M.mode==='peer'?'PARTNER INTERVIEW':'SOLO PRACTICE'}: STEP ${M.i+1} OF ${M.steps.length}</div><div class="dots">${M.steps.map((s,i)=>`<i class="${i<M.i?'done':i===M.i?'now':''}"></i>`).join('')}</div></div>
+      <div class="clock" id="clock">0:00</div>
+    </div>
+    <div style="margin-top:.6rem;font-weight:700">${title}</div>
+    <div class="bigq">"${esc(text)}"</div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="small-btn" id="readQ">🔈 Read it aloud</button></div>
+    ${st.k==='q'?`<div style="margin-top:.8rem">${stepsHTML(q)}</div>
+      ${M.mode==='peer'?`<p style="margin:.6rem 0 0"><b>Interviewer, ask a follow-up if the answer is short:</b> ${q.follow.map(f=>`<span class="say">${esc(f)}</span>`).join(' ')}</p>`:
+      `<div style="margin-top:.8rem"><button class="btn ghost" id="showS">Show a sample answer</button><div id="solS"></div></div>`}`
+    :`<p style="margin:.6rem 0 0;color:var(--muted)">${esc(st.note)}</p>`}
+    <div class="next" style="margin-top:1.3rem">
+      <button class="btn ghost" id="mBack" ${M.i===0?'disabled style="opacity:.4"':''}>Back</button>
+      <button class="btn" id="mNext">${M.i===M.steps.length-1?'Finish interview':'Next'}</button>
+    </div></div>`;
+  const tick=()=>{const c=$('#clock');if(!c){clearInterval(clockInt);return}const s=Math.round((Date.now()-M.start)/1000);c.textContent=fmt(s);c.className='clock'+(s>=180&&s<=300?' ok':s>300?' over':'')};
+  clearInterval(clockInt);tick();clockInt=setInterval(tick,1000);
+  $('#readQ').onclick=()=>speak(text);
+  if($('#showS'))$('#showS').onclick=()=>{$('#solS').innerHTML=`<div class="sample" style="margin-top:.6rem"><div class="who"><h3 style="margin:0">${esc(q.who)}</h3></div>${segHTML(q)}</div>`;$('#showS').remove()};
+  $('#mBack').onclick=()=>{if(M.i>0){M.i--;runMock()}};
+  $('#mNext').onclick=()=>{
+    if(M.i<M.steps.length-1){M.i++;runMock();return}
+    clearInterval(clockInt);
+    const s=Math.round((Date.now()-M.start)/1000);
+    S.mocks=(S.mocks||0)+1;if(!S.done.s4){addPts(40)}award('s4');
+    box.innerHTML=`<div class="stage" style="text-align:center"><h3>Interview complete! Time: ${fmt(s)}</h3>
+      <p>${s<180?'That was shorter than 3 minutes. Try to give more details and examples.':s<=300?'Great timing: between 3 and 5 minutes.':'That was longer than 5 minutes. Try to keep answers focused.'}</p>
+      <div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap">${M.mode==='peer'?'<button class="btn" id="toFb">Give peer feedback</button>':''}<button class="btn ghost" id="again">New interview</button></div></div>`;
+    M=null;
+    if($('#toFb'))$('#toFb').onclick=()=>go('s5');
+    $('#again').onclick=()=>go('s4');
+  };
+}
+
+const FB=[
+ ['Content (40)','Answered the questions, gave real examples, sounded natural (not memorized).'],
+ ['Professionalism (10)','On time, polite greeting and closing, professional words.'],
+ ['Language (25)','Good vocabulary and grammar, kept talking, fixed mistakes calmly.'],
+ ['Communication skills (25)','Eye contact, posture, gestures, clear loud voice, confidence, no notes.']
+];
+VIEWS.s5=m=>{
+  S.fb=S.fb||{};
+  m.innerHTML=`<div class="print-area">
+  <div class="printhead"><h2>Peer feedback: LSC 1503 Mock Interview</h2></div>
+  <h2 class="noprint">5. Peer feedback</h2>
+  <p class="lead noprint">The interviewer or observer fills this in after the practice interview. It follows the four parts of the real rubric. You can print it and give it to your partner.</p>
+  <div class="card">
+    <div class="builder two">
+      <div><label for="fbC">Candidate</label><input id="fbC" data-f="cand" value="${esc(S.fb.cand||S.partner||'')}"></div>
+      <div><label for="fbI">Feedback from</label><input id="fbI" data-f="from" value="${esc(S.fb.from||S.name||'')}"></div>
+    </div>
+  </div>
+  ${FB.map((f,i)=>`<div class="card"><h3>${f[0]}</h3><p style="margin:.2rem 0;color:var(--muted)">${f[1]}</p>
+    <div class="rate">${['⭐ Great','👍 Good','🌱 Needs practice'].map(r=>`<label><input type="radio" name="r${i}" value="${r}" ${S.fb['r'+i]===r?'checked':''}>${r}</label>`).join('')}</div></div>`).join('')}
+  <div class="card"><h3>⭐ One star: something you did well</h3><textarea class="auto" data-f="star" placeholder="You did well at…">${esc(S.fb.star||'')}</textarea><div class="pcopy"></div></div>
+  <div class="card"><h3>🌱 One wish: something to improve</h3><textarea class="auto" data-f="wish" placeholder="Next time, try to…">${esc(S.fb.wish||'')}</textarea><div class="pcopy"></div></div>
+  </div>
+  <div class="noprint" style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="btn" id="fbPrint">🖨️ Print feedback</button><button class="btn ghost" id="fbClear">Clear form for a new partner</button></div>`;
+  const check=()=>{if(FB.every((f,i)=>S.fb['r'+i])&&S.fb.star&&S.fb.wish)award('s5')};
+  m.querySelectorAll('input[data-f]').forEach(i=>i.oninput=()=>{S.fb[i.dataset.f]=i.value});
+  m.querySelectorAll('input[type=radio]').forEach(r=>r.onchange=()=>{S.fb[r.name]=r.value;check()});
+  wireAreas(m,S.fb,check);
+  $('#fbPrint').onclick=()=>{syncCopies(m);window.print()};
+  $('#fbClear').onclick=()=>{S.fb={};go('s5')};
+};
+function syncCopies(root){root.querySelectorAll('textarea.auto').forEach(t=>{const c=t.nextElementSibling;if(c&&c.classList.contains('pcopy')){c.textContent=t.value;c.classList.toggle('empty',!t.value.trim())}})}
+function wireAreas(root,store,after){
+  root.querySelectorAll('textarea.auto').forEach(t=>{
+    const upd=()=>{autoGrow(t);store[t.dataset.f]=t.value;const c=t.nextElementSibling;if(c&&c.classList.contains('pcopy')){c.textContent=t.value;c.classList.toggle('empty',!t.value.trim())}
+      const wc=t.parentElement.querySelector('.wc');if(wc){const n=t.value.trim()?t.value.trim().split(/\s+/).length:0;wc.textContent=n+' words'}after&&after()};
+    t.addEventListener('input',upd);requestAnimationFrame(()=>{autoGrow(t);syncCopies(root);const wc=t.parentElement.querySelector('.wc');if(wc){const n=t.value.trim()?t.value.trim().split(/\s+/).length:0;wc.textContent=n+' words'}});
+  });
+}
+
+const FINAL=[
+ {q:'Which two questions will your teacher always ask?',o:['Question 1 and Question 2','3a and 3b','3g and 3h'],a:0,why:'Q1 and Q2 are mandatory.'},
+ {q:'How long is the interview?',o:['1 minute','3 to 5 minutes','15 minutes'],a:1,why:'3–5 minutes.'},
+ {q:'Which part of the rubric has the most marks?',o:['Professionalism','Content (task achievement)','Language'],a:1,why:'40 marks.'},
+ {q:'Where must your Question 2 skill come from?',o:['Any skill','The LSC 1503 self-paced study skills on Blackboard','Your high school'],a:1,why:'One of the 12 study skills.'},
+ {q:'What does STAR stand for?',o:['Situation, Task, Action, Result','Start, Talk, Answer, Repeat','Skill, Task, Answer, Reason'],a:0,why:'Use it for 3c–3e.'},
+ {q:'Which is the best weakness to talk about?',o:['"I\'m always late."','"I don\'t have any."','"I get nervous in presentations, but I\'m practising and improving."'],a:2,why:'Real, small, and improving.'},
+ {q:'Teacher: "Can you tell me more about that?" Best start:',o:['"No, that\'s all."','"Sure. For example…"','"I already said it."'],a:1,why:'Use follow-ups to show more.'},
+ {q:'You didn\'t understand the question. What do you say?',o:['"What?"','"Sorry, could you repeat the question, please?"','Nothing'],a:1,why:'Polite and professional.'},
+ {q:'What should you do with your script before the interview?',o:['Memorize it word for word','Highlight the keywords and practise speaking from them','Bring it and read it'],a:1,why:'Well prepared but natural. No notes in the interview.'},
+ {q:'Which posture is best?',o:['Lean back with arms crossed','Sit up straight, lean a little forward, hands relaxed','Look at the floor'],a:1,why:'Confident and engaged.'}
+];
+VIEWS.s6=m=>{
+  m.innerHTML=`<h2>6. Final check</h2>
+  <p class="lead">10 questions from the whole series. Score 8 or more (80%) to get your final <b>Interview Pass</b>.</p>
+  ${S.final?`<div class="tip"><strong>Your last score:</strong> ${S.final.score}/10 (${S.final.pct}%). You can take it again.</div>`:''}
+  <div id="fq"></div>`;
+  mcq($('#fq'),'s6',shuffle(FINAL),{done:(r,t)=>{
+    const pct=Math.round(r/t*100);S.final={score:r,pct,date:new Date().toLocaleString()};
+    const res=document.createElement('div');res.className='card';res.style.textAlign='center';
+    if(pct>=80){award('s6');res.innerHTML=`<h3>🎫 You passed: ${pct}%</h3><p>Now write your script in Station 7.</p><button class="btn" id="showCert">Show my Interview Pass</button> <button class="btn ghost" id="toS">Go to my script</button>`;$('#fq').appendChild(res);$('#showCert').onclick=showCert;$('#toS').onclick=()=>go('s7');showCert()}
+    else{res.innerHTML=`<h3>${pct}%: almost there</h3><p>You need 80%. Review Station 3 and try again.</p><button class="btn" id="retry">Try again</button>`;$('#fq').appendChild(res);$('#retry').onclick=()=>go('s6')}
+  }});
+};
+
+VIEWS.s7=m=>{
+  S.script=S.script||{};
+  m.innerHTML=`<div class="print-area">
+  <div class="printhead"><h2 style="margin-bottom:.2rem">My Interview Script: LSC 1503</h2><p style="margin:0">Name: <b>${esc(S.name||'')}</b> &nbsp; Date: ${new Date().toLocaleDateString()}</p>
+  <p style="font-size:.85rem;margin:.3rem 0 .6rem">After printing: underline 5–8 <b>keywords</b> in each answer and practise speaking from the keywords. Don't memorize word for word, and don't bring this into the interview.</p></div>
+  <h2 class="noprint">7. My interview script</h2>
+  <p class="lead noprint">Now write your own answer for every question. Use the map steps and sentence starters. The boxes grow as you write. When you finish, click <b>Print my script</b>. Empty boxes print with lines, so you can also write by hand.</p>
+  <div class="warn noprint"><b>How to use your script:</b> writing helps you organize your ideas. After you print it, <b>underline the keywords</b> and practise speaking from them. If you memorize it word for word, you will sound robotic, and the rubric takes marks for that. You cannot use notes in the interview.</div>
+  ${QS.map(q=>`<div class="sq" data-id="${q.id}">
+    <div class="qh"><span class="tag">${q.tag}</span><div><b>${esc(q.q)}</b></div></div>
+    ${stepsHTML(q)}
+    <p class="noprint" style="margin:.2rem 0 .5rem;font-size:.9rem;color:var(--muted)">Starters: ${q.starters.map(s=>`<span class="say">${esc(s)}</span>`).join(' ')}</p>
+    <textarea class="auto" data-f="${q.id}" placeholder="Write your answer here…" aria-label="Your answer to ${q.tag}">${esc(S.script[q.id]||'')}</textarea><div class="pcopy"></div>
+    <div class="wc noprint"></div>
+  </div>`).join('')}
+  </div>
+  <div class="noprint" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem">
+    <button class="btn" id="prScript">🖨️ Print my script</button>
+    <button class="btn ghost" id="dlScript">Download as text</button>
+    <button class="btn ghost" id="svScript">Save progress</button>
+  </div>
+  <p id="scCount" class="noprint" style="color:var(--muted)"></p>`;
+  const cnt=()=>{const n=QS.filter(q=>(S.script[q.id]||'').trim().split(/\s+/).length>=15).length;$('#scCount').textContent=`Answers written (15+ words): ${n} of 10`;
+    m.querySelectorAll('.sq').forEach(el=>el.classList.toggle('long',(S.script[el.dataset.id]||'').length>900));
+    if(n>=10&&!S.done.s7){addPts(50);award('s7')}};
+  wireAreas(m,S.script,cnt);cnt();
+  $('#prScript').onclick=()=>{syncCopies(m);window.print()};
+  $('#svScript').onclick=()=>$('#saveBtn').click();
+  $('#dlScript').onclick=()=>{
+    const t=`MY INTERVIEW SCRIPT: LSC 1503\n${S.name}\n\n`+QS.map(q=>`${q.tag}: ${q.q}\n${S.script[q.id]||''}`).join('\n\n')+`\n\nUnderline the keywords and practise speaking from them. Don't memorize word for word.\nInterview Ready: The Mock Interview | Designed by: Nazila Motahari`;
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'}));a.download=`My_interview_script_${(S.name||'student').replace(/[^\w]+/g,'_')}.txt`;a.click();
+  };
+};
+
+/* ================= CERT & FILES ================= */
+function showCert(){
+  $('#cName').textContent=S.name||'Student';
+  $('#cInit').textContent=(S.name||'S').trim().charAt(0).toUpperCase();
+  $('#cMeta').textContent=`Final check: ${S.final?S.final.pct:0}%  |  Points: ${S.points}  |  Badges: ${S.badges.length}/7  |  ${new Date().toLocaleDateString()}`;
+  $('#cert').classList.add('show');confetti();
+}
+function download(obj,fname){
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}));
+  a.download=fname;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+const safe=()=>(S.name||'student').replace(/[^\w]+/g,'_');
+$('#resBtn').onclick=()=>download({app:'Interview Ready: The Mock Interview',course:'LSC 1503',student:S.name,finalScore:S.final,points:S.points,badges:S.badges.map(b=>BADGES[b].name),script:S.script,date:new Date().toISOString()},`IRM_results_${safe()}.json`);
+$('#saveBtn').onclick=()=>{download({app:'IRM',state:S},`IRM_progress_${safe()}.json`);toast('Progress file downloaded.')};
+$('#loadBtn').onclick=()=>$('#loadFile').click();
+$('#loadFile').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=()=>{
+    try{const d=JSON.parse(r.result);if(d.app!=='IRM')throw 0;Object.assign(S,d.state);refreshTop();go('home');toast('Welcome back, '+(S.name||'student')+'!')}
+    catch(err){toast('This file is not an Interview Ready: The Mock Interview progress file.')}
+  };r.readAsText(f);e.target.value='';
+};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#cert').classList.remove('show')});
+go('home');
+
+
+
+
+
+
+function printCert(){document.body.classList.add('pcert');window.print()}
+window.addEventListener('afterprint',()=>document.body.classList.remove('pcert'));
+
+</script>
+</body>
+</html>
